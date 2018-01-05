@@ -10,9 +10,7 @@ public class SinglyLinkedList {
         public String value;
         public Node pointer = null;
 
-        public Node(String value) {
-            this.value = value;
-        }
+        public Node(String value) { this.value = value; }
     }
 
     public void push(Node node) {
@@ -38,20 +36,22 @@ public class SinglyLinkedList {
     //        previous = current
     //4. Repeat process with the temp 'next' variable stored at first
     //          current = next
+    //5. After looping through, the tail has a null pointer, so change
+    //   the pointer to previous before assigning as new head
     public Node reverse() {
-        if (head.pointer == null) {
-            return head;
-        }
-        tail = head;
+        if (head.pointer == null) { return head; }
+        // triple starting variables
         Node current = head;
-        Node next;
+        Node next = head.pointer;
         Node previous = null;
+
         while (current.pointer != null) {
             next = current.pointer;
             current.pointer = previous;
             previous = current;
             current = next;
         }
+        current.pointer = previous;
         head = current;
         return head;
     }

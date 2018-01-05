@@ -3,29 +3,25 @@ package com.company;
 import java.util.ArrayList;
 
 public abstract class AddLargeInts {
-    public static void addLargeInts(String a, String b) {
+    public static String addLargeInts(String a, String b) {
             int lengthDiff = a.length() - b.length();
-            if (lengthDiff == 0) {
-                addEqualStrings(a, b);
-                return;
-            }
-            String zeros = makeZeros(Math.abs(lengthDiff));
-            if (lengthDiff > 0) {
-                // pad b by lenDiff of zeros
-                addEqualStrings(a, zeros.concat(b));
-            } else if (lengthDiff < 0) {
-                // pad a by lenDiff of zeros
-                addEqualStrings(zeros.concat(a), b);
-            }
+            if (lengthDiff == 0) { return addEqualStrings(a, b); }
+
+
+            // if nums are diff lengths, prepend the smaller num
+            // with xtra 0's to avoid indexOutOfBounds exception
+            String xtraZeros = makeZeros(Math.abs(lengthDiff));
+            if (lengthDiff > 0) { return addEqualStrings(a, xtraZeros.concat(b)); }
+            else                { return addEqualStrings(xtraZeros.concat(a), b); }
         }
 
         private static String addEqualStrings(String a, String b) {
             ArrayList output = new ArrayList();
-            int numLength = a.length() -1;
+            int numLength = a.length() - 1;
             int carryTens = 0;
             // Begin at the ones digit of the epic int
             for (int i = numLength; i >= 0; i--) {
-                // add the single digit ints plus carryover from previous
+                // add the single digit ints plus carryover from previous addition
                 int int1 = Character.getNumericValue(a.charAt(i));
                 int int2 = Character.getNumericValue(b.charAt(i));
                 int sum = int1 + int2 + carryTens;
@@ -46,7 +42,6 @@ public abstract class AddLargeInts {
                 output = addToFront(output, 1);
             }
             // join array of string digits to output a sum in string form
-            System.out.println(String.join("", output));
             return String.join("", output);
         }
         private static ArrayList addToFront(ArrayList array, int element) {

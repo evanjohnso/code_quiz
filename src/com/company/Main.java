@@ -11,9 +11,9 @@ public class Main {
         list.push(new Node("2"));
         list.push(new Node("3"));
         list.push(new Node("4"));
-        System.out.println(list.head.value + " " + list.tail.value);
+        list.printValues();
         list.reverse();
-        System.out.println(list.head.value + " " + list.tail.value);
+        list.printValues();
 
         AddLargeInts.addLargeInts("1234", "12345678");
         AddLargeInts.addLargeInts("12345678", "1234");
