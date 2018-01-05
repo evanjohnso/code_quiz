@@ -42,16 +42,17 @@ public abstract class AddLargeInts {
                 if (sum >= 10) {
                     carryOne = 1;
                     int remainder = sum - 10;
-                    output.add(0, remainder);
+                    output.add(0, String.valueOf(remainder));
                 } else {
                     carryOne = 0;
-                    output.add(0, sum);
+                    output.add(0, String.valueOf(sum));
                 }
             }
             if (carryOne == 1) {
-                output.add(0, 1);
+                output.add(0, "1");
             }
-            System.out.println(output);
+            String z = String.join("", output);
+            System.out.println(z);
             return output;
         }
 
