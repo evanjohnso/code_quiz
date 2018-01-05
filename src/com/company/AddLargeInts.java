@@ -4,57 +4,64 @@ import java.util.ArrayList;
 
 public abstract class AddLargeInts {
     public static void addLargeInts(String a, String b) {
-            int lenDiff = a.length() - b.length();
-            if (lenDiff == 0) {
+            int lengthDiff = a.length() - b.length();
+            if (lengthDiff == 0) {
                 addEqualStrings(a, b);
                 return;
             }
-            int net = Math.abs(lenDiff);
-
-            String zeros = "";
-            System.out.println(lenDiff);
-            System.out.println(net);
-            while (net > 0) {
-                zeros = zeros.concat("0");
-                net--;
-            }
-
-            String netted = "";
-            if (lenDiff > 0) {
-                netted = zeros.concat(b);
+            String zeros = makeZeros(Math.abs(lengthDiff));
+            if (lengthDiff > 0) {
                 // pad b by lenDiff of zeros
-            } else if (lenDiff < 0) {
-                netted = zeros.concat(a);
+                addEqualStrings(a, zeros.concat(b));
+            } else if (lengthDiff < 0) {
                 // pad a by lenDiff of zeros
+                addEqualStrings(zeros.concat(a), b);
             }
-            System.out.println("a: " + netted);
-            addEqualStrings(a, b);
         }
 
-        private static ArrayList addEqualStrings(String a, String b) {
+        private static String addEqualStrings(String a, String b) {
             ArrayList output = new ArrayList();
             int numLength = a.length() -1;
-            int carryOne = 0;
+            int carryTens = 0;
+            // Begin at the ones digit of the epic int
             for (int i = numLength; i >= 0; i--) {
-                int a1 = Character.getNumericValue(a.charAt(i));
-                int b1 = Character.getNumericValue(b.charAt(i));
-                int sum = a1 + b1 + carryOne;
+                // add the single digit ints plus carryover from previous
+                int int1 = Character.getNumericValue(a.charAt(i));
+                int int2 = Character.getNumericValue(b.charAt(i));
+                int sum = int1 + int2 + carryTens;
+                // if sum is double digits, save ones place to array, and
+                // carry the tens place over to next round
                 if (sum >= 10) {
-                    carryOne = 1;
-                    int remainder = sum - 10;
-                    output.add(0, String.valueOf(remainder));
+                    carryTens = 1;
+                    int onesPlace = sum - 10;
+                    output = addToFront(output, onesPlace);
                 } else {
-                    carryOne = 0;
-                    output.add(0, String.valueOf(sum));
+                    carryTens = 0;
+                    output = addToFront(output, sum);
                 }
             }
-            if (carryOne == 1) {
-                output.add(0, "1");
+            // after full loop, if one last tens to carry over,
+            // add it to front of array
+            if (carryTens == 1) {
+                output = addToFront(output, 1);
             }
-            String z = String.join("", output);
-            System.out.println(z);
-            return output;
+            // join array of string digits to output a sum in string form
+            System.out.println(String.join("", output));
+            return String.join("", output);
+        }
+        private static ArrayList addToFront(ArrayList array, int element) {
+            // add ints to array in string form in order to use String.join() later
+            array.add(0, String.valueOf(element));
+            return array;
         }
 
+        private static String makeZeros(int num) {
+            String zeros = "";
+            while (num > 0) {
+                zeros = zeros.concat("0");
+                num--;
+            }
+            return zeros;
+        }
 }
 
